@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Truecaller Login Test</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    width: 90%;
+    max-width: 380px;
+    background: white;
+    padding: 35px 25px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+
+.logo {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+h2 {
+    margin: 10px 0;
+    color: #202124;
+}
+
+p {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+button {
+    width: 100%;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.truecaller {
+    background: #0087ff;
+    color: white;
+}
+
+.google {
+    background: white;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #555;
+}
+
+.badge {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">🔐</div>
+
+    <h2>Welcome Back</h2>
+
+    <p>
+        Login securely using your
+        preferred method.
+    </p>
+
+    <div class="badge">
+        Recommended
+    </div>
+
+    <button class="truecaller"
+            onclick="loginTruecaller()">
+        Continue with Truecaller
+    </button>
+
+    <button class="google"
+            onclick="loginGoogle()">
+        Continue with Google
+    </button>
+
+    <div id="status">
+        Choose a login method
+    </div>
+
+</div>
+
+<script>
+
+// REPLACE WITH YOUR TRUECALLER APP KEY
+const APP_KEY = "KUWVJaac6e925e03240af9ca673cfe4340122";
+
+const APP_NAME = "OREVA";
+
+function loginTruecaller() {
+
+    const status = document.getElementById("status");
+
+    if (APP_KEY === "PASTE_YOUR_APP_KEY_HERE") {
+        status.innerText = "Please configure your App Key.";
+        return;
+    }
+
+    if (!/Android/i.test(navigator.userAgent)) {
+        status.innerText =
+            "Truecaller web login requires Android.";
+        return;
+    }
+
+    const requestId = crypto.randomUUID();
+
+    sessionStorage.setItem(
+        "truecaller_request_id",
+        requestId
+    );
+
+    const params = new URLSearchParams({
+        type: "btmsheet",
+        requestNonce: requestId,
+        partnerKey: APP_KEY,
+        partnerName: APP_NAME,
+        lang: "en",
+        loginPrefix: "continue",
+        loginSuffix: "login",
+        ctaPrefix: "continuewith",
+        btnShape: "round",
+        skipOption: "useanothermethod"
+    });
+
+    const url =
+        "truecallersdk://truesdk/web_verify?" +
+        params.toString();
+
+    status.innerText =
+        "Opening Truecaller...";
+
+    window.location.href = url;
+
+    setTimeout(() => {
+
+        if (document.hasFocus()) {
+            status.innerText =
+                "If Truecaller did not open, check that it is installed and configured.";
+        } else {
+            status.innerText =
+                "Truecaller opened. Waiting for verification.";
+        }
+
+    }, 1000);
+}
+
+function loginGoogle() {
+
+    document.getElementById("status").innerText =
+        "Google Login will be added later.";
+
+}
+
+</script>
+
+</body>
+</html>
