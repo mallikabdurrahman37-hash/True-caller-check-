@@ -136,12 +136,6 @@ function loginTruecaller() {
         return;
     }
 
-    if (!/Android/i.test(navigator.userAgent)) {
-        status.innerText =
-            "Truecaller web login requires Android.";
-        return;
-    }
-
     const requestId = crypto.randomUUID();
 
     sessionStorage.setItem(
